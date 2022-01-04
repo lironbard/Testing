@@ -20,3 +20,24 @@ describe("getCandy", () => {
     expect(queriedCandy).toBeUndefined();
   });
 });
+
+describe("buy", () => {
+  test("Should buy a candy, cashRegister increase, amount decrease", () => {
+    const candyStore = new CandyStore();
+    const newCandy = {
+      name: "Mars",
+      id: uuidv4(),
+      price: 4,
+      amount: 10,
+    };
+    const oldRegister = candyStore.cashRegister;
+    const oldAmount = newCandy.amount;
+    candyStore.candies.push({ ...newCandy });
+    candyStore.buy(newCandy.id);
+
+    expect(candyStore.cashRegister).toBe(oldRegister + newCandy.price);
+    const candyFromCandies = candyStore.candies.find((x) => x.id === newCandy.id);
+
+    expect(candyFromCandies.amount).toBe(oldAmount - 1);
+  });
+});
